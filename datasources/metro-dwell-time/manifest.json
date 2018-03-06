@@ -1,0 +1,7 @@
+{
+  "name": "metro-dwell-time",
+  "author": "rory",
+  "description": "This DataSource collects data about the things you do on the Metro website.",
+  "version": "0.1",
+  "sites": [".*metro\\.exchange.*"]
+}
