@@ -1,0 +1,7 @@
+{
+  "name": "imgur-basic-interaction",
+  "author": "Conor",
+  "description": "This runs on imgur.com and collects the time the page was loaded, the time it was left, the URL, and if a post was upvoted, downvoted or favorited.",
+  "version": "0.1",
+  "sites": [".*imgur\\.com.*"]
+}

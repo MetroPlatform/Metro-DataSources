@@ -1,0 +1,7 @@
+{
+  "name": "basic-youtube-actions",
+  "author": "Conor",
+  "description": "This runs on all youtube pages and collects the time a video is played, paused or finished at, along with the page title and URL.",
+  "version": "0.1",
+  "sites": ["^.*youtube\\.com.*$"]
+}

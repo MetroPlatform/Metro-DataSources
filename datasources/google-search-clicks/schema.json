@@ -1,0 +1,8 @@
+{
+  "event": "[load|click]",
+  "time": "1234567890",
+  "query": "this is the google search made",
+  "resultIndex": "[-1 if load event | what number result if click event]",
+  "url": "[\"\" if load event | the page URL if click event]",
+  "resultTitle": "[\"\" if load event | the title of the result clicked if click event]"
+}

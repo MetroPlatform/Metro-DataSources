@@ -1,0 +1,7 @@
+{
+  "name": "reddit-basic-votes",
+  "author": "Conor",
+  "description": "This is a basic Reddit source that collects up/down votes and the post title.",
+  "version": "0.1",
+  "sites": [".*reddit\\.com.*"]
+}

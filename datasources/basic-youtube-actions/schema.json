@@ -1,0 +1,6 @@
+{
+  "event": "[play|pause|finished]",
+  "time": "1234567890",
+  "url": "The current page URL",
+  "title": "The page title"
+}

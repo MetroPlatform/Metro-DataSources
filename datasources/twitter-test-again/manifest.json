@@ -1,0 +1,7 @@
+{
+  "name": "twitter-test-again",
+  "author": "Conor",
+  "description": "This is the general Twitter datasource improved with a schema.",
+  "version": "0.8.1",
+  "sites": [".*twitter\\.com.*"]
+}
