@@ -2,6 +2,6 @@
   "name": "metro-dwell-time",
   "author": "Rory",
   "description": "This DataSource records how long you spend on a webpage in the metro.exchange domain.",
-  "version": "0.1",
+  "version": "0.1.1",
   "sites": [".*metro\\.exchange.*"]
 }
