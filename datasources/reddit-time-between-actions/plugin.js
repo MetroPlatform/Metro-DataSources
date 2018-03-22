@@ -31,8 +31,8 @@ const registerEventsHandler = function (node) {
           datapoint['event'] = currentEvent;
           datapoint['time'] = duration;
 
-          // Don't send more than 1 datapoint per second:
-          if(duration > 1000) {
+          // Don't send more than 1 datapoint per 5 seconds:
+          if(duration > 5000) {
             mc.sendDatapoint(datapoint);
           }
         }
