@@ -2,6 +2,6 @@
   "name": "interpals-text",
   "author": "Rory",
   "description": "This DataSource tracks every message the user sends on interpals.net along with the timestmap",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "sites": [".*\\.interpals.net/pm.php?.*"]
 }
