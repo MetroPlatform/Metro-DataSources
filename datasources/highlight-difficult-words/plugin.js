@@ -8,10 +8,12 @@ const sendDatapoint = function(text, mc) {
 }
 
 const createMenuButton = function(mc) {
+  console.log('Creating contextMenu button');
   chrome.contextMenus.create({
     title: "Difficult Word",
     contexts: ["selection"],
     onclick: function(info, tab) {
+      console.log('Clicked');
       let text = window.getSelection().toString();
       sendDatapoint(text, mc);
     }
@@ -19,6 +21,7 @@ const createMenuButton = function(mc) {
 }
 
 function initDataSource(metroClient) {
+  console.log('Loading difficult-words DataSource...')
   createMenuButton(metroClient);
-  console.log("Loaded difficult-words DataSource");
+  console.log("Done!");
 }
