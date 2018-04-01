@@ -1,8 +1,7 @@
 {
   "name": "highlight-difficult-words",
   "author": "Rory",
-  "description": "This DataSource allows the language-learners to highlight
-  text and identify it as difficult to understand",
+  "description": "This DataSource allows the language-learners to highlight text and identify it as difficult to understand",
   "version": "0.1.0",
-  "sites": ["\\.*"]
+  "sites": ["*"]
 }
