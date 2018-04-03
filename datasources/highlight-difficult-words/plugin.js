@@ -7,20 +7,25 @@ const sendDatapoint = function(text, mc) {
   mc.sendDatapoint(datapoint);
 }
 
-const createMenuButton = function(mc) {
-  console.log('Creating contextMenu button');
-  chrome.contextMenus.create({
-    title: "Difficult Word",
-    contexts: ["selection"],
-    onclick: function(info, tab) {
-      console.log('Clicked');
-      let text = window.getSelection().toString();
-      sendDatapoint(text, mc);
-    }
-  });
+const sendDifficultWord = function() {
+  console.log("Callback triggered");
+  let text = window.getSelection().toString();
+  sendDatapoint(text, mc);
 }
 
+const createMenuButton = function(mc) {
+  console.log('Creating contextMenu button');
+  mc.createContextMenuButton({
+    buttonFunction: 'highlightDifficultWordsFunction',
+    buttonTitle: 'Difficult Word',
+    contexts: ['selection']
+  }, sendDifficultWord)
+}
+
+var mc;
+
 function initDataSource(metroClient) {
+  mc = metroClient;
   console.log('Loading difficult-words DataSource...')
   createMenuButton(metroClient);
   console.log("Done!");
