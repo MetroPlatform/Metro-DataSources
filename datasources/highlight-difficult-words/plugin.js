@@ -16,7 +16,7 @@ const createMenuButton = function(mc) {
     buttonFunction: 'highlightDifficultWordsFunction',
     buttonTitle: 'Difficult Word',
     contexts: ['selection']
-  }, sendDifficultWord)
+  }, sendDifficultWord);
 }
 
 var mc;
