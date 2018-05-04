@@ -9,11 +9,12 @@ const sendDatapoint = function(text, mc) {
 const sendDifficultWord = function() {
   let text = window.getSelection().toString();
   sendDatapoint(text, mc);
+  return true;
 }
 
 const createMenuButton = function(mc) {
   mc.createContextMenuButton({
-    buttonFunction: 'highlightDifficultWordsFunction',
+    functionName: 'highlightDifficultWordsFunction',
     buttonTitle: 'Difficult Word',
     contexts: ['selection']
   }, sendDifficultWord);
