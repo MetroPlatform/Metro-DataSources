@@ -9,10 +9,11 @@ const sendDatapoint = function(text, mc) {
 const sendDifficultWord = function() {
   let text = window.getSelection().toString();
   sendDatapoint(text, mc);
-  return {
+  var resp = {
     'status': 1,
     'msg': 'Success!'
   };
+  return resp;
 }
 
 const createMenuButton = function(mc) {
