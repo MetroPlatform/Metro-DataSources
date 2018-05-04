@@ -6,13 +6,30 @@ const sendDatapoint = function(text, mc) {
   mc.sendDatapoint(datapoint);
 }
 
+const validateInput = function(text) {
+  if(text.includes(' ')) {
+    var resp = {
+      'status': 0,
+      'msg': 'Please select a single word'
+    }
+  } else {
+    var resp = {
+      'status': 1,
+      'msg': 'Success!'
+    };
+  }
+
+  return resp;
+}
+
 const sendDifficultWord = function() {
   let text = window.getSelection().toString();
-  sendDatapoint(text, mc);
-  var resp = {
-    'status': 1,
-    'msg': 'Success!'
-  };
+  var resp = validateInput(text);
+
+  if(resp['status'] == 1){
+    sendDatapoint(text, mc);
+  }
+
   return resp;
 }
 
