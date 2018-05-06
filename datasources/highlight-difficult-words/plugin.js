@@ -10,7 +10,7 @@ const validateInput = function(text) {
   if(text.includes(' ')) {
     var resp = {
       'status': 0,
-      'msg': 'Please select a single word yo'
+      'msg': 'Please select a single word yo :)'
     }
   } else {
     var resp = {
