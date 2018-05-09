@@ -1,4 +1,4 @@
-const sendDatapoint = function(text, mc) {
+const send = function(text, mc) {
   let datapoint = {};
   datapoint['text'] = text;
   console.log(datapoint);
@@ -6,14 +6,36 @@ const sendDatapoint = function(text, mc) {
   mc.sendDatapoint(datapoint);
 }
 
-const sendDifficultWord = function() {
-  let text = window.getSelection().toString();
-  sendDatapoint(text, mc);
+const validateInput = function(text) {
+  if(text.includes(' ')) {
+    var resp = {
+      'status': 0,
+      'msg': 'Please select one word at a time.'
+    }
+  } else {
+    var resp = {
+      'status': 1,
+      'msg': 'Success!'
+    };
+  }
+
+  return resp;
+}
+
+const sendDifficultWord = function(contextInfo) {
+  let text = contextInfo['selectionText'];
+  var resp = validateInput(text);
+
+  if(resp['status'] == 1){
+    send(text, mc);
+  }
+
+  return resp;
 }
 
 const createMenuButton = function(mc) {
   mc.createContextMenuButton({
-    buttonFunction: 'highlightDifficultWordsFunction',
+    functionName: 'highlightDifficultWordsFunction',
     buttonTitle: 'Difficult Word',
     contexts: ['selection']
   }, sendDifficultWord);
