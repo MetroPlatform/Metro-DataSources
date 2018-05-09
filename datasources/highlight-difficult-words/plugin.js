@@ -1,4 +1,4 @@
-const sendDatapoint = function(text, mc) {
+const send = function(text, mc) {
   let datapoint = {};
   datapoint['text'] = text;
   console.log(datapoint);
@@ -10,7 +10,7 @@ const validateInput = function(text) {
   if(text.includes(' ')) {
     var resp = {
       'status': 0,
-      'msg': 'Please select a single word yo :)'
+      'msg': 'Please select one word at a time.'
     }
   } else {
     var resp = {
@@ -22,12 +22,12 @@ const validateInput = function(text) {
   return resp;
 }
 
-const sendDifficultWord = function() {
-  let text = window.getSelection().toString();
+const sendDifficultWord = function(contextInfo) {
+  let text = contextInfo['selectionText'];
   var resp = validateInput(text);
 
   if(resp['status'] == 1){
-    sendDatapoint(text, mc);
+    send(text, mc);
   }
 
   return resp;
