@@ -1,0 +1,7 @@
+{
+  "name": "mark-fake-2",
+  "author": "Conor",
+  "description": "This datasource allows users to right-click on a webpage and mark that the content is inaccurate/false, give a reason from a dropdown and provide an optional in-depth explanation.",
+  "version": "0.1.0",
+  "sites": [".*"]
+}
