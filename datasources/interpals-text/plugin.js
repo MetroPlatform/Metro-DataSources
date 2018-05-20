@@ -1,4 +1,4 @@
-const registerEventsHandler = function(doc, mc) {
+const registerEventsHandler = function(mc) {
   let textarea = $('#message');
   let sendButton = $("#msg_submit");
 
@@ -10,13 +10,11 @@ const registerEventsHandler = function(doc, mc) {
 const sendDatapoint = function(message, mc) {
   let datapoint = {};
   datapoint['message'] = message;
-  datapoint['timestamp'] = Date.now();
-  console.log(datapoint);
 
   mc.sendDatapoint(datapoint);
 }
 
 function initDataSource(metroClient) {
-  registerEventsHandler(document, metroClient);
+  registerEventsHandler(metroClient);
   console.log("Loaded Interpals-Text DataSource");
 }
