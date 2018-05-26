@@ -1,0 +1,7 @@
+{
+  "name": "omny-label",
+  "author": "Rory",
+  "description": "This DataSource allows users to label the brand of clothing in an image",
+  "version": "0.1.0",
+  "sites": [".*"]
+}
