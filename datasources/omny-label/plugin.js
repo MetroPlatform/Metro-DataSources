@@ -1,5 +1,5 @@
 const omnyLabel = {
-  mc: null, // Keep a global ref to the client
+  mc: null, // Keep a ref to the client
   name: 'omny-label',
 
   /*
@@ -89,4 +89,4 @@ const omnyLabel = {
   }
 }
 
-registerDataSource(omnyLabel);
+registerDataSource(omnyLabel); // Register the DataSource to start it
