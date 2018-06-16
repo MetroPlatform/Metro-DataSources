@@ -2,6 +2,6 @@
   "name": "google-search-clicks",
   "author": "Conor",
   "description": "This runs on all Google search pages and collects the time the page was loaded, the time a link was clicked, the URL of the link clicked, the title of the link clicked, what rank that link had on the results page and the query that was searched.",
-  "version": "0.1",
+  "version": "0.2",
   "sites": ["^.*google\\..*/search.*$"]
 }

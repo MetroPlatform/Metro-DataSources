@@ -1,59 +1,68 @@
-// List of events that when they occur will send a datapoint.
-const triggeringEvents = [
-  "click",
-  "copy",
-  "cut",
-  "paste",
-  "drag",
-  "drop",
-  "keypress",
-  "wheel"
-]
+const redditTimeBetweenActions = {
+  mc: null,
+  name: 'reddit-time-between-actions',
 
-const registerEventsHandler = function (node) {
-  // Set up an event handler for each triggeringEvent:
-  for(var i=0; i<triggeringEvents.length; i++) {
-    let currentEvent = triggeringEvents[i];
+  // List of events that when they occur will send a datapoint.
+  triggeringEvents: [
+    "click",
+    "copy",
+    "cut",
+    "paste",
+    "drag",
+    "drop",
+    "keypress",
+    "wheel"
+  ],
 
-    // Add the event listener:
-    document.addEventListener(currentEvent, function(event) {
-      // An event was triggered - record the current time:
-      let eventTime = Date.now();
+  registerEventsHandler: function (node) {
+    let gThis = this;
 
-      // And get the previously stored time:
-      mc.readData("timepoint", function(prevTime) {
-        if(prevTime > 0) {
-          // Find the time difference:
-          let duration = eventTime - prevTime;
+    // Set up an event handler for each triggeringEvent:
+    for(var i=0; i<this.triggeringEvents.length; i++) {
+      let currentEvent = this.triggeringEvents[i];
 
-          // And create the datapoint:
-          let datapoint = {};
-          datapoint['event'] = currentEvent;
-          datapoint['time'] = duration;
+      // Add the event listener:
+      document.addEventListener(currentEvent, function(event) {
+        // An event was triggered - record the current time:
+        let eventTime = Date.now();
 
-          // Don't send more than 1 datapoint per 5 seconds:
-          if(duration > 5000) {
-            mc.sendDatapoint(datapoint);
+        // And get the previously stored time:
+        gThis.mc.readData("timepoint", function(prevTime) {
+          console.log(prevTime);
+          if(prevTime > 0) {
+            // Find the time difference:
+            let duration = eventTime - prevTime;
+            console.log(duration);
+
+            // And create the datapoint:
+            let datapoint = {};
+            datapoint['event'] = currentEvent;
+            datapoint['time'] = duration;
+
+            // Don't send more than 1 datapoint per 5 seconds:
+            if(duration > 5000) {
+              gThis.mc.sendDatapoint(datapoint);
+            }
           }
-        }
-        
-        // Finally, store the updated timepoint:
-        mc.storeData("timepoint", eventTime);
+
+          // Finally, store the updated timepoint:
+          gThis.mc.storeData("timepoint", eventTime);
+        });
       });
-    });
+    }
+  },
+
+  initDataSource: function(metroClient) {
+    this.mc = metroClient;
+    console.log("Beginning reddit-time-between-actions data source.");
+
+    // We want to set the initial load time here:
+    let currentTime = Date.now();
+    this.mc.storeData("timepoint", currentTime);
+
+    // Then start our plugin.
+    this.registerEventsHandler(document.body);
   }
 }
 
-
-var mc;
-function initDataSource(metroClient) {
-  mc = metroClient;
-  console.log("Beginning reddit-time-between-actions data source.");
-
-  // We want to set the initial load time here:
-  let currentTime = Date.now();
-  mc.storeData("timepoint", currentTime);
-
-  // Then start our plugin.
-  registerEventsHandler(document.body);
-}
+registerDataSource(redditTimeBetweenActions);
