@@ -1,20 +1,29 @@
-const registerEventsHandler = function(mc) {
-  let textarea = $('#message');
-  let sendButton = $("#msg_submit");
+const interpalsText = {
+  mc: null,
+  name: 'interpals-text',
 
-  sendButton.bind("click", function(event) {
-    sendDatapoint(textarea.val(), mc)
-  });
+  registerEventsHandler: function() {
+    let textarea = $('#message');
+    let sendButton = $("#msg_submit");
+    let gThis = this;
+
+    sendButton.bind("click", function(event) {
+      gThis.sendDatapoint(textarea.val(), this.mc)
+    });
+  },
+
+  sendDatapoint: function(message) {
+    let datapoint = {};
+    datapoint['message'] = message;
+
+    this.mc.sendDatapoint(datapoint);
+  },
+
+  initDataSource: function(metroClient) {
+    this.mc = metroClient;
+    this.registerEventsHandler();
+    console.log("Loaded Interpals-Text DataSource");
+  }
 }
 
-const sendDatapoint = function(message, mc) {
-  let datapoint = {};
-  datapoint['message'] = message;
-
-  mc.sendDatapoint(datapoint);
-}
-
-function initDataSource(metroClient) {
-  registerEventsHandler(metroClient);
-  console.log("Loaded Interpals-Text DataSource");
-}
+registerDataSource(interpalsText);

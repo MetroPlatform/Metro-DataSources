@@ -2,6 +2,6 @@
   "name": "reddit-time-between-actions",
   "author": "Conor",
   "description": "This is a basic Reddit source that records the time between users actions. e.g. mouse movement, button press, mouse click.",
-  "version": "0.1",
+  "version": "0.2",
   "sites": [".*reddit\\.com.*"]
 }

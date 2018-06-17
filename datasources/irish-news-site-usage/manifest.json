@@ -2,7 +2,7 @@
   "name": "irish-news-site-usage",
   "author": "Conor",
   "description": "This datasource records the time you load a web page and the time you leave the page, along with the URL that you visit for a number of news sites: The Irish Times, The Independent, Joe.ie, Her.ie, The Guardian, The Daily Mail, BBC, RTE, The Journal.",
-  "version": "0.0.1",
+  "version": "0.2",
   "sites": [".*\\.irishtimes\\.com.*",
     ".*\\.independent\\..*",
     ".*\\.joe\\.ie.*",

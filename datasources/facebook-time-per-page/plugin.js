@@ -1,16 +1,23 @@
-function initDataSource(metroClient) {
-  loadTime = (new Date).getTime();
-  URL = window.location.href;
+const facebookTimePerPage = {
+  mc: null,
+  name: 'facebook-time-per-page',
 
-  window.addEventListener("beforeunload", function() {
-    leaveTime = (new Date).getTime();
+  initDataSource: function(metroClient) {
+    loadTime = (new Date).getTime();
+    URL = window.location.href;
 
-    let datapoint = {
-      "loadTime": loadTime,
-      "leaveTime": leaveTime,
-      "URL": URL
-    }
+    window.addEventListener("beforeunload", function() {
+      leaveTime = (new Date).getTime();
 
-    metroClient.sendDatapoint(datapoint);
-  });
+      let datapoint = {
+        "loadTime": loadTime,
+        "leaveTime": leaveTime,
+        "URL": URL
+      }
+
+      metroClient.sendDatapoint(datapoint);
+    });
+  }
 }
+
+registerDataSource(facebookTimePerPage);

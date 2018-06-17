@@ -1,21 +1,26 @@
-function monitorDwellTime(metroClient) {
-  loadTime = (new Date).getTime();
-  URL = window.location.href;
+const metroDwellTime = {
+  name: 'metro-dwell-time',
 
-  window.addEventListener("beforeunload", function() {
-    leaveTime = (new Date).getTime();
+  monitorDwellTime: function(metroClient) {
+    loadTime = (new Date).getTime();
+    URL = window.location.href;
 
-    let datapoint = {
-      "loadTime": loadTime,
-      "leaveTime": leaveTime,
-      "URL": URL
-    }
+    window.addEventListener("beforeunload", function() {
+      leaveTime = (new Date).getTime();
 
-    metroClient.sendDatapoint(datapoint);
-  });
+      let datapoint = {
+        "loadTime": loadTime,
+        "leaveTime": leaveTime,
+        "URL": URL
+      }
+
+      metroClient.sendDatapoint(datapoint);
+    });
+  },
+
+  initDataSource: function(metroClient) {
+    this.monitorDwellTime(metroClient);
+  }
 }
 
-function initDataSource(metroClient) {
-  mc = metroClient;
-  monitorDwellTime(mc);
-}
+registerDataSource(metroDwellTime);

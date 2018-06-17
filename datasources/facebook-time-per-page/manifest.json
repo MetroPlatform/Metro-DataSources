@@ -2,7 +2,7 @@
   "name": "facebook-time-per-page",
   "author": "Conor",
   "description": "This datasource records the time you load a web page and the time you leave the page, along with the URL that you visit for Facebook and Messenger domains.",
-  "version": "0.0.1",
+  "version": "0.1",
   "sites": [".*\\.facebook\\.com.*",
     ".*\\.messenger\\.com.*"]
 }

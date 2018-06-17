@@ -1,49 +1,54 @@
-const send = function(text, mc) {
-  let datapoint = {};
-  datapoint['text'] = text;
-  console.log(datapoint);
+const highlightDifficultWords = {
+  mc: null,
+  name: "highlight-difficult-words",
 
-  mc.sendDatapoint(datapoint);
-}
+  initDataSource: function(metroClient) {
+    this.mc = metroClient;
+    this.createMenuButton(metroClient);
+  },
 
-const validateInput = function(text) {
-  if(text.includes(' ')) {
-    var resp = {
-      'status': 0,
-      'msg': 'Please select one word at a time.'
+  send: function(text) {
+    let datapoint = {};
+    datapoint['text'] = text;
+    console.log(datapoint);
+
+    this.mc.sendDatapoint(datapoint);
+  },
+
+  validateInput: function(text) {
+    if(text.includes(' ')) {
+      var resp = {
+        'status': 0,
+        'msg': 'Please select one word at a time.'
+      }
+    } else {
+      var resp = {
+        'status': 1,
+        'msg': 'Success!'
+      };
     }
-  } else {
-    var resp = {
-      'status': 1,
-      'msg': 'Success!'
-    };
+
+    return resp;
+  },
+
+  sendDifficultWord: function(contextInfo) {
+    let text = contextInfo['selectionText'];
+    var resp = this.validateInput(text);
+
+    if(resp['status'] == 1){
+      this.send(text);
+    }
+
+    return resp;
+  },
+
+  createMenuButton: function() {
+    this.mc.createContextMenuButton({
+      functionName: 'highlightDifficultWordsFunction',
+      buttonTitle: 'Difficult Word',
+      contexts: ['selection']
+    }, this.sendDifficultWord.bind(this));
   }
-
-  return resp;
 }
 
-const sendDifficultWord = function(contextInfo) {
-  let text = contextInfo['selectionText'];
-  var resp = validateInput(text);
-
-  if(resp['status'] == 1){
-    send(text, mc);
-  }
-
-  return resp;
-}
-
-const createMenuButton = function(mc) {
-  mc.createContextMenuButton({
-    functionName: 'highlightDifficultWordsFunction',
-    buttonTitle: 'Difficult Word',
-    contexts: ['selection']
-  }, sendDifficultWord);
-}
-
-var mc;
-
-function initDataSource(metroClient) {
-  mc = metroClient;
-  createMenuButton(metroClient);
-}
+registerDataSource(highlightDifficultWords);
