@@ -15,7 +15,6 @@ const googleSearchClicks = {
       const gThis = this;
 
       linkNode.addEventListener("click", function(event) {
-        console.log("test");
         gThis.sendClickDatapoint(resultIndex, linkURL, linkText);
       });
     }
