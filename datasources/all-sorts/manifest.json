@@ -1,0 +1,7 @@
+{
+  "name": "all-sorts",
+  "author": "Conor",
+  "description": "This DataSource allows users to interact with all-sorts",
+  "version": "0.1",
+  "sites": [".*"]
+}
