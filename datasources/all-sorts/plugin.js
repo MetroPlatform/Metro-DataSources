@@ -29,6 +29,7 @@ const allSorts = {
             "endTime": endTime
           };
 
+          allSorts.mc.sendDatapoint(datapoint);
           console.log(datapoint);
           // Finally set the data values to null so we know we're no longer in a job.
           allSorts.mc.storeData("projectID", null);
@@ -107,6 +108,7 @@ const allSorts = {
           "comment": comment
         };
 
+        allSorts.mc.sendDatapoint(datapoint);
         console.log(datapoint);
       });
     });
