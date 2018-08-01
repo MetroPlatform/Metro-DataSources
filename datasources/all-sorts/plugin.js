@@ -116,11 +116,7 @@ const allSorts = {
    * Reset the project/job IDs to null.
    */
   jobDoneHandler: function() {
-    // Sets the button to be useless.
-    $(this).text("Complete");
-    $(this).off("click");
-
-    // Finally set the data values to null so we know we're no longer in a job.
+    // Set the data values to null so we know we're no longer in a job.
     allSorts.mc.storeData("projectID", null);
     allSorts.mc.storeData("jobID", null);
   },
@@ -129,19 +125,30 @@ const allSorts = {
    * Run initially to take all nodes with class 'start-button' and register
    * them as starting a Metro job.
    */
-  registerJobStarts: function() {
-    $(".start-button").on("click", function() {
-      // Change the click handler to be the jobDoneHandler.
-      $(this).text("Done");
-      $(this).off("click");
-      $(this).on("click", allSorts.jobDoneHandler);
+  registerJobs: function() {
+    // Jobs aren't always visible so update every time the jobs list updates:
+    let mainNode = document.getElementById("task_list");
+    this.jobRegisterObserver.observe(mainNode, this.jobRegisterConfig);
 
+    $(".start-button").on("click", function() {
       // Store the relevant pieces of data.
       let projectID = $(this).data()['projectId'];
       let jobID = $(this).data()['jobId'];
+      console.log("attached:");
+      console.log(projectID);
+      console.log(jobID);
+      console.log("yeaa");
 
       allSorts.mc.storeData("projectID", projectID);
       allSorts.mc.storeData("jobID", jobID);
+    });
+
+    // Similarly for the job done button.
+    $(".stop-button").on("click", function() {
+      // Change the click handler to be the jobDoneHandler.
+      $(this).on("click", allSorts.jobDoneHandler);
+
+      console.log("detached");
     });
   },
 
@@ -170,6 +177,16 @@ const allSorts = {
     });
   },
 
+  jobRegisterObserver: new MutationObserver(function(mutations) {
+    allSorts.registerJobs();
+  }),
+
+  jobRegisterConfig: {
+    attributes: false,
+    childList: true,
+    subtree: false
+  },
+
   observer: new MutationObserver(function(mutations) {
     allSorts.attachToPhotos();
   }),
@@ -182,7 +199,7 @@ const allSorts = {
 
   initDataSource: function(metroClient) {
     this.mc = metroClient;
-    this.registerJobStarts();
+    this.registerJobs();
 
     // The MutationObserver ended up crashing the browser as Instagram loads so
     // much content on the fly. This is the workaround. Get the first "article"
