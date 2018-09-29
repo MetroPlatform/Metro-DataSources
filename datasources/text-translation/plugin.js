@@ -65,6 +65,7 @@ const translateText = {
             {val : 'ru', text: 'ru'},
             {val : 'it', text: 'it'},
             {val : 'por', text: 'por'},
+            {val : 'esp', text: 'esp'},
           ]
         },
         {
@@ -77,6 +78,7 @@ const translateText = {
             {val : 'ru', text: 'ru'},
             {val : 'it', text: 'it'},
             {val : 'por', text: 'por'},
+            {val : 'esp', text: 'esp'},
           ]
         }
       ],
