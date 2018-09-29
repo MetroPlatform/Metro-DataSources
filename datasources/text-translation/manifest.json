@@ -1,0 +1,7 @@
+{
+  "name": "text-translation",
+  "author": "Rory",
+  "description": "This DataSource allows you to highlight a piece of text, right-click, and enter a translation",
+  "version": "0.1",
+  "sites": [".*"]
+}
