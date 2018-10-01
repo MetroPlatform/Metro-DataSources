@@ -1,0 +1,7 @@
+{
+  "name": "generic-image-labeling",
+  "author": "Rory",
+  "description": "This DataSource allows users to label an image",
+  "version": "0.1",
+  "sites": [".*"]
+}
