@@ -1,9 +1,11 @@
 const daftMessageSent = {
   name: 'daft-message-sent',
 
-  getListingInfo: function() {
+  getListingInfo: function(loadTime, leaveTime) {
     info = {
       user_data: {
+        loadTime: loadTime,
+        leaveTime: leaveTime,
         action: 'message_sent'
       },
       daft_data: {
@@ -171,9 +173,7 @@ const daftMessageSent = {
       // Do this:
       leaveTime = (new Date).getTime();
 
-      let datapoint = oThis.getListingInfo();
-      datapoint['user_data']['load_time'] = loadTime;
-      datapoint['user_data']['leave_time'] = leaveTime;
+      let datapoint = oThis.getListingInfo(loadTime, leaveTime);
 
       console.log(datapoint);
 
