@@ -1,0 +1,7 @@
+{
+  "name": "daft-message-sent",
+  "author": "Rory",
+  "description": "Generates a datapoint every time you send a message on daft.ie.",
+  "version": "0.1",
+  "sites": [".*daft\\.ie.*"]
+}

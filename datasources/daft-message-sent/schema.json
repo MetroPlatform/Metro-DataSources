@@ -1,0 +1,20 @@
+{
+  "user_data": {
+    "action": "message_sent"
+  },
+  "daft_data": {
+    "title": "title",
+    "price": "price text",
+    "listing_type": "type",
+    "header_info": "header info",
+    "property_overview": ["one", "two", "three"],
+    "available_from": "text",
+    "available_for": "text",
+    "property_description": "text",
+    "facilities": ["one", "two", "three"],
+    "shortcode": "text",
+    "data_entered_renewed": "text",
+    "view_count": 5,
+    "image_count": 5
+  }
+}
