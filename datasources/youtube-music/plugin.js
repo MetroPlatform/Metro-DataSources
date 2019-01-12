@@ -25,12 +25,15 @@ const youtubeMusic = {
     this.showMore()
     // Then wait 2 seconds, before getting the category
     setTimeout(function(){
-      self.setUpInterval(currentEvent, self, title, views, url, $videoPlayer);
+      self.run(currentEvent, self, title, views, url, $videoPlayer);
     },2000);
   },
 
-  setUpInterval: function(currentEvent, self, title, views, url, $videoPlayer) {
+  run: function(currentEvent, self, title, views, url, $videoPlayer) {
     const category = this.getCategory();
+
+    self.sendDatapoint("opened", category, url, title, views);
+
     setInterval(function() {
       let playing = $videoPlayer.hasClass("playing-mode");
       let paused = $videoPlayer.hasClass("paused-mode");
