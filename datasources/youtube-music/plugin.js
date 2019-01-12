@@ -37,6 +37,7 @@ const youtubeMusic = {
     }
 
     setInterval(function() {
+      let $videoPlayer = $('#movie_player');
       let playing = $videoPlayer.hasClass("playing-mode");
       let paused = $videoPlayer.hasClass("paused-mode");
       let ended = $videoPlayer.hasClass("ended-mode");
