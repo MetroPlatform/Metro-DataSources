@@ -30,27 +30,28 @@ const youtubeMusic = {
   },
 
   run: function(currentEvent, self, title, views, url, $videoPlayer) {
-    const category = this.getCategory();
+    if($videoPlayer.length) { // Check that we're watching a video
+      const category = this.getCategory();
+      self.sendDatapoint("opened", category, url, title, views);
 
-    self.sendDatapoint("opened", category, url, title, views);
-
-    setInterval(function() {
-      let playing = $videoPlayer.hasClass("playing-mode");
-      let paused = $videoPlayer.hasClass("paused-mode");
-      let ended = $videoPlayer.hasClass("ended-mode");
+      setInterval(function() {
+        let playing = $videoPlayer.hasClass("playing-mode");
+        let paused = $videoPlayer.hasClass("paused-mode");
+        let ended = $videoPlayer.hasClass("ended-mode");
 
 
-      if(playing && currentEvent != "play") {
-        self.sendDatapoint("play", category, url, title, views);
-        currentEvent = "play";
-      } if(paused && currentEvent != "pause") {
-        self.sendDatapoint("pause", category, url, title, views);
-        currentEvent = "pause";
-      } if(ended && currentEvent != "finished") {
-        self.sendDatapoint("finished", category, url, title, views);
-        currentEvent = "finished";
-      }
-    }, 250);
+        if(playing && currentEvent != "play") {
+          self.sendDatapoint("play", category, url, title, views);
+          currentEvent = "play";
+        } if(paused && currentEvent != "pause") {
+          self.sendDatapoint("pause", category, url, title, views);
+          currentEvent = "pause";
+        } if(ended && currentEvent != "finished") {
+          self.sendDatapoint("finished", category, url, title, views);
+          currentEvent = "finished";
+        }
+      }, 250);
+    }
   },
 
   showMore: function() {
