@@ -3,9 +3,9 @@ YouTube dynamically loads data, which means that we can't just scrape normally, 
 wait for the DOM to be updated.
 */
 
-const basicYoutubeActions = {
+const youtubeMusic = {
   mc: null,
-  name: 'basic-youtube-actions',
+  name: 'youtube-music',
 
   registerEventsHandler: function(node) {
     // First we need to get the video player element:
@@ -18,17 +18,18 @@ const basicYoutubeActions = {
     const self = this;
 
     const title = $('#container h1.title yt-formatted-string').text();
+    const views = $('#container div#info').find('span.view-count').text().replace(/\D/g,'');
     const url = window.location.href;
 
     // Click the "Show More" button
     this.showMore()
     // Then wait 2 seconds, before getting the category
     setTimeout(function(){
-      self.setUpInterval(currentEvent, self, title, url, $videoPlayer);
+      self.setUpInterval(currentEvent, self, title, views, url, $videoPlayer);
     },2000);
   },
 
-  setUpInterval: function(currentEvent, self, title, url, $videoPlayer) {
+  setUpInterval: function(currentEvent, self, title, views, url, $videoPlayer) {
     const category = this.getCategory();
     setInterval(function() {
       let playing = $videoPlayer.hasClass("playing-mode");
@@ -37,13 +38,13 @@ const basicYoutubeActions = {
 
 
       if(playing && currentEvent != "play") {
-        self.sendDatapoint("play", category, url, title);
+        self.sendDatapoint("play", category, url, title, views);
         currentEvent = "play";
       } if(paused && currentEvent != "pause") {
-        self.sendDatapoint("pause", category, url, title);
+        self.sendDatapoint("pause", category, url, title, views);
         currentEvent = "pause";
       } if(ended && currentEvent != "finished") {
-        self.sendDatapoint("finished", category, url, title);
+        self.sendDatapoint("finished", category, url, title, views);
         currentEvent = "finished";
       }
     }, 250);
@@ -54,21 +55,27 @@ const basicYoutubeActions = {
   },
 
   getCategory: function() {
-    let category = $('ytd-expander.ytd-video-secondary-info-renderer ytd-metadata-row-renderer #content').find('a').text();
-    $('ytd-expander.ytd-video-secondary-info-renderer #less').click(); // Click the "show more button"
+    // Get the container div which has the #title and #content of the Category field
+    let categoryContainer = $('ytd-expander.ytd-video-secondary-info-renderer ytd-metadata-row-renderer:has(#title yt-formatted-string:contains("Category"))');//:contains("category")')
+    // Extract the text from the #content div
+    let category = categoryContainer.find('#content').text().trim();
+    // Click the "Show Less" button
+    $('ytd-expander.ytd-video-secondary-info-renderer #less').click();
 
     return category;
   },
 
   validateDatapoint: function(datapoint) {
+    // Only accept the datapoint if it's in the 'music' category
     if(datapoint['category'] == "Music") {
       return true;
     }
 
+    console.log(`Video category is ${datapoint['category']} so not sending it`)
     return false;
   },
 
-  sendDatapoint: function(eventType, category, url, title) {
+  sendDatapoint: function(eventType, category, url, title, views) {
     // Create the datapoint:
     let datapoint = {};
     datapoint['event'] = eventType;
@@ -76,6 +83,7 @@ const basicYoutubeActions = {
     datapoint['url'] = url;
     datapoint['title'] = title;
     datapoint['category'] = category;
+    datapoint['views'] = views;
 
     // Log it
     console.log(datapoint);
@@ -88,7 +96,6 @@ const basicYoutubeActions = {
   initDataSource: function(metroClient) {
     // The entrypoint
     this.mc = metroClient;
-    console.log("Beginning YouTube actions DataSource.");
     const self = this;
 
     // Set up the event listeners after the page loads fully
@@ -98,4 +105,4 @@ const basicYoutubeActions = {
   }
 }
 
-registerDataSource(basicYoutubeActions);
+registerDataSource(youtubeMusic);
