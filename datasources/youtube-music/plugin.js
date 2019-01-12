@@ -89,6 +89,7 @@ const youtubeMusic = {
     console.log(datapoint);
 
     if(this.validateDatapoint(datapoint)) {
+      // Validate and send the datapoint
       this.mc.sendDatapoint(datapoint);
     }
   },
