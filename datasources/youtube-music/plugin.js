@@ -3,66 +3,57 @@ YouTube dynamically loads data, which means that we can't just scrape normally, 
 wait for the DOM to be updated.
 */
 
+function isVideo(url) {
+  let r = new RegExp("http(?:s?):\\/\\/(?:www\\.)?youtu(?:be\\.com\\/watch\\?v=|\\.be\\/)([\\w\\-\\_]*)(&(amp;)?‌​[\\w\\?‌​=]*)?")
+  return r.test(url);
+}
+
 const youtubeMusic = {
   mc: null,
   name: 'youtube-music',
 
-  registerEventsHandler: function(node) {
-    // First we need to get the video player element:
-    let $videoPlayer = $('#movie_player');
-    // There is a class that is dynamically changed on this element. Either
-    // "paused-mode" or "playing-mode" or "ended-mode". We are going to
-    // setInterval on this and monitor it for changes to the class. When it
-    // changes, we fire that event.
-    let currentEvent = "";
-    const self = this;
+  operate: function(previousUrl) {
+    let currentUrl = window.location.href;
+    if(previousUrl == currentUrl) {
+      return currentUrl;
+    } else if(isVideo(currentUrl)) { // New page
+      const self = this;
+      setTimeout(function() {
+        // Get the video player
+        let $videoPlayer = $('#movie_player');
 
-    const title = $('#container h1.title yt-formatted-string').text();
-    const views = $('#container div#info').find('span.view-count').text().replace(/\D/g,'');
-    const url = window.location.href;
+        // YouTube loads data dynamically, so we must click the "show more" button
+        //    extract the category, and then click the "show less" button.
+        self.showMore();
+        setTimeout(function() {
+          self.createDatapoint(self, currentUrl, $videoPlayer);
+        }, 10000);
+      }, 2000);
 
-    // Click the "Show More" button
-    this.showMore()
-    // Then wait 2 seconds, before getting the category
-    setTimeout(function(){
-      self.run(currentEvent, self, title, views, url, $videoPlayer);
-    },2000);
+      return currentUrl;
+    } else {
+      return currentUrl;
+    }
   },
 
-  run: function(currentEvent, self, title, views, url, $videoPlayer) {
+  createDatapoint: function(self, url, $videoPlayer) {
     const category = this.getCategory();
+    let title = $('#container h1.title yt-formatted-string').text();
+    let views = $('#container div#info').find('span.view-count').text().replace(/\D/g,'');
 
     if($videoPlayer.hasClass('playing-mode')){
       self.sendDatapoint("opened", category, url, title, views);
     }
-
-    setInterval(function() {
-      let $videoPlayer = $('#movie_player');
-      let playing = $videoPlayer.hasClass("playing-mode");
-      let paused = $videoPlayer.hasClass("paused-mode");
-      let ended = $videoPlayer.hasClass("ended-mode");
-
-
-      if(playing && currentEvent != "play") {
-        self.sendDatapoint("play", category, url, title, views);
-        currentEvent = "play";
-      } else if(paused && currentEvent != "pause") {
-        self.sendDatapoint("pause", category, url, title, views);
-        currentEvent = "pause";
-      } else if(ended && currentEvent != "finished") {
-        self.sendDatapoint("finished", category, url, title, views);
-        currentEvent = "finished";
-      }
-    }, 250);
   },
 
   showMore: function() {
-    $('ytd-expander.ytd-video-secondary-info-renderer #more').click(); // Click the "show more button"
+    let clickBtn = $('ytd-expander.ytd-video-secondary-info-renderer #more');
+    clickBtn.click(); // Click the "show more button"
   },
 
   getCategory: function() {
     // Get the container div which has the #title and #content of the Category field
-    let categoryContainer = $('ytd-expander.ytd-video-secondary-info-renderer ytd-metadata-row-renderer:has(#title yt-formatted-string:contains("Category"))');//:contains("category")')
+    let categoryContainer = $('ytd-expander.ytd-video-secondary-info-renderer ytd-metadata-row-renderer:has(#title yt-formatted-string:contains("Category"))');
     // Extract the text from the #content div
     let category = categoryContainer.find('#content').text().trim();
     // Click the "Show Less" button
@@ -105,10 +96,10 @@ const youtubeMusic = {
     this.mc = metroClient;
     const self = this;
 
-    // Set up the event listeners after the page loads fully
-    setTimeout(function(){
-      self.registerEventsHandler(document.body);
-    },2000);
+    let url = "";
+    setInterval(function() {
+      url = self.operate(url);
+    }, 500);
   }
 }
 
