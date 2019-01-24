@@ -1,0 +1,7 @@
+{
+  "name": "news-article-opened",
+  "author": "Rory",
+  "description": "This DataSource records every article the user opens.",
+  "version": "0.1",
+  "sites": ["*"]
+}
