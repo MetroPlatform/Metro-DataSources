@@ -1,0 +1,16 @@
+{
+  "name": "news-dwell-and-scroll",
+  "author": "Rory",
+  "description": "This DataSource records how long you spend on a news article, and the % you scroll down the page.",
+  "version": "0.1",
+  "sites": [".*\\.irishtimes\\.com.*",
+    ".*\\.independent\\..*",
+    ".*\\.joe\\.ie.*",
+    ".*\\.her\\.ie.*",
+    ".*\\.theguardian\\.com.*",
+    ".*\\.dailymail\\.co\\.uk.*",
+    ".*\\.bbc\\.com.*",
+    ".*\\.rte\\.ie.*",
+    ".*\\.medium\\.com.*",
+    ".*\\.thejournal\\.ie.*"]
+}
