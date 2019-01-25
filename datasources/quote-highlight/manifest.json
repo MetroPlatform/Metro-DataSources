@@ -1,0 +1,16 @@
+{
+  "name": "quote-highlight",
+  "author": "Rory",
+  "description": "This DataSource allows users to highlight a piece of text as the 'top' quote of the article",
+  "version": "0.1",
+  "sites": [".*\\.irishtimes\\.com.*",
+    ".*\\.independent\\..*",
+    ".*\\.joe\\.ie.*",
+    ".*\\.her\\.ie.*",
+    ".*\\.theguardian\\.com.*",
+    ".*\\.dailymail\\.co\\.uk.*",
+    ".*\\.bbc\\.com.*",
+    ".*\\.rte\\.ie.*",
+    ".*\\.medium\\.com.*",
+    ".*\\.thejournal\\.ie.*"]
+}
