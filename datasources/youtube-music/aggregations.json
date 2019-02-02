@@ -1,5 +1,9 @@
 [
     {
+        "name": "New",
+        "function": "_.chain(feed).map((value, idx) => {let result = value;result.data['primaryRank'] = idx;return result;}).sortBy(function(item) {return item.data.primaryRank;}).value().reverse()"
+    },
+    {
         "name": "Most Popular",
         "function": "_.chain(feed).groupBy(function(o) {return o.data.title;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length;return result;}).sortBy(function(item) {return item.data.primaryRank;}).value().reverse()"
     },
