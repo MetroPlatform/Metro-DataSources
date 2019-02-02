@@ -74,13 +74,15 @@ const youtubeMusic = {
 
   sendDatapoint: function(eventType, category, url, title, views) {
     // Create the datapoint:
-    let datapoint = {};
-    datapoint['event'] = eventType;
-    datapoint['time'] = Date.now();
-    datapoint['url'] = url;
-    datapoint['title'] = title;
-    datapoint['category'] = category;
-    datapoint['views'] = views;
+    let datapoint = {
+      _url: url,
+      _str: title,
+      _timestamp: Date.now(),
+      event: eventType,
+      category: category,
+      title: title,
+      views: views
+    };
 
     // Log it
     console.log(datapoint);
