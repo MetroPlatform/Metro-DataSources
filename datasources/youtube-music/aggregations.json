@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Most Popular",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data.title;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length;return result;}).sortBy(function(item) {return item.data.primaryRank;}).value().reverse()"
+    },
+    {
+        "name": "Most Obscure",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data.title;}).map((value, key) => {let result = value[0];let obscurity = (value.length / parseInt(result.data['views']))*1000000;result.data['primaryRank'] = Math.round(obscurity * 100) / 100;return result;}).sortBy(function(item) {return item.data.primaryRank;}).value().reverse()"
+    }
+]
