@@ -76,8 +76,10 @@ const youtubeMusic = {
     // Create the datapoint:
     let datapoint = {
       _url: url,
+      url: url,
       _str: title,
       _timestamp: Date.now(),
+      time: Date.now(),
       event: eventType,
       category: category,
       title: title,
