@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Top Articles",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length;return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Top Authors",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data.author;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length; result.data['_str'] = result.data.author; result.data['primaryRankDisplay'] = result.data.primaryRank + ' articles';return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Top Publications",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data.publication;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length; result.data['_str'] = result.data.publication; result.data['primaryRankDisplay'] = result.data.primaryRank + ' articles'; return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Top Keywords",
+        "function": "_.chain(feed).reduce((memo, point) => {result = memo.concat(point.data.keywords);return result;}, []).reduce((memo, val) => {if(memo.hasOwnProperty(val)) {memo[val] += 1;} else {memo[val] = 1;}return memo;}, {}).map((value, key) => {let result = {'data': {'primaryRank': value, '_str': key, 'primaryRankDisplay': value + ' appearances'}}; return result;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Completion Rate",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0]; let count = value.length; let total = _.reduce(value, (memo, point) => { return memo + point.data.scrollPercentage }, 0); let avg = Math.round(total/count*100)/100; result.data['primaryRank'] = avg; result.data['primaryRankDisplay'] = avg + '% read'; return result; }).sortBy((item) => {return -item.data.primaryRank}).value()",
+        "displayIcon": "fas fa-bolt"
+    }
+]

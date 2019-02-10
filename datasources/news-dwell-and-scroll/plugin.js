@@ -34,7 +34,20 @@ const dwellAndScroll = {
         return author;
       }
     }
-    return "unk";
+    return "";
+  },
+
+  getKeywords: function() {
+    // Tries to find the author of the article from the webpage
+    var info = document.getElementsByTagName('META');
+
+    for (var i=0;i<info.length;i++) {
+      if (info[i].getAttribute('name') != null && info.getAttribute('name').toLowerCase().includes('keywords')) {
+        keywords = info[i].getAttribute('CONTENT');
+        return keywords.split(',');
+      }
+    }
+    return [];
   },
 
   getTitle: function() {
@@ -48,7 +61,20 @@ const dwellAndScroll = {
         return title;
       }
     }
-    return "unk";
+    return "";
+  },
+
+  getDescription: function() {
+    // Tries to find the title of the article from the webpage
+    var info = document.getElementsByTagName('META');
+
+    for (var i=0;i<info.length;i++) {
+      if (info[i].getAttribute('name') != null && info[i].getAttribute('name').toLowerCase().includes('description')) {
+        description = info[i].getAttribute('CONTENT');
+        return description;
+      }
+    }
+    return "";
   },
 
   monitorDwellTime: function(metroClient) {
@@ -72,11 +98,15 @@ const dwellAndScroll = {
       let datapoint = {
         "author": self.getAuthor(),
         "title": self.getTitle(),
+        "keywords": self.getKeywords(),
+        "description": self.getDescription(),
+        "_str": self.getTitle(),
+        "_timestamp": Date.now(),
         "loadTime": loadTime,
         "leaveTime": leaveTime,
         "scrollPercentage": Math.round(scrollPercentage),
-        "url": URL,
-        "hostname": window.location.hostname
+        "_url": URL,
+        "publication": window.location.hostname
       }
 
       console.log(datapoint);
