@@ -110,9 +110,9 @@ const dwellAndScroll = {
       }
 
       console.log(datapoint);
-      console.log(this.mc)
+      console.log(self.mc)
 
-      this.mc.sendDatapoint(datapoint);
+      self.mc.sendDatapoint(datapoint);
       console.log("sent");
     });
   },
