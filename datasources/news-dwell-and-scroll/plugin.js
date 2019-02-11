@@ -114,6 +114,7 @@ const dwellAndScroll = {
 
       self.mc.sendDatapoint(datapoint);
       console.log("sent");
+      return null;
     });
   },
 
