@@ -42,7 +42,7 @@ const dwellAndScroll = {
     var info = document.getElementsByTagName('META');
 
     for (var i=0;i<info.length;i++) {
-      if (info[i].getAttribute('name') != null && info.getAttribute('name').toLowerCase().includes('keywords')) {
+      if (info[i].getAttribute('name') != null && info[i].getAttribute('name').toLowerCase().includes('keywords')) {
         keywords = info[i].getAttribute('CONTENT');
         return keywords.split(',');
       }
