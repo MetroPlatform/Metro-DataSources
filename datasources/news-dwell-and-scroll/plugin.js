@@ -77,7 +77,7 @@ const dwellAndScroll = {
     return "";
   },
 
-  monitorDwellTime: function(metroClient) {
+  monitorDwellTime: function() {
     let self = this;
 
     var scrollPercentage = 0;
@@ -96,30 +96,33 @@ const dwellAndScroll = {
       leaveTime = (new Date).getTime();
 
       let datapoint = {
-        "author": self.getAuthor(),
-        "title": self.getTitle(),
-        "keywords": self.getKeywords(),
-        "description": self.getDescription(),
-        "_str": self.getTitle(),
-        "_timestamp": Date.now(),
-        "loadTime": loadTime,
-        "leaveTime": leaveTime,
-        "scrollPercentage": Math.round(scrollPercentage),
-        "_url": URL,
-        "publication": window.location.hostname
+        author: self.getAuthor(),
+        title: self.getTitle(),
+        keywords: self.getKeywords(),
+        description: self.getDescription(),
+        _str: self.getTitle(),
+        _timestamp: Date.now(),
+        loadTime: loadTime,
+        leaveTime: leaveTime,
+        scrollPercentage: Math.round(scrollPercentage),
+        _url: URL,
+        publication: window.location.hostname
       }
 
       console.log(datapoint);
+      console.log(this.mc)
 
-      metroClient.sendDatapoint(datapoint);
+      this.mc.sendDatapoint(datapoint);
+      console.log("sent");
     });
   },
 
   initDataSource: function(metroClient) {
+    this.mc = metroClient;
     let contentType = $('meta[property="og:type"]').attr('content');
 
     if(contentType == "article") {
-      this.monitorDwellTime(metroClient);
+      this.monitorDwellTime();
     }
     
   }
