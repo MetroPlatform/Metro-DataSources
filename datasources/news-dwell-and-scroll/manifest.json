@@ -2,6 +2,6 @@
   "name": "news-dwell-and-scroll",
   "author": "Rory",
   "description": "This DataSource records how long you spend on a news article, and the % you scroll down the page.",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "sites": [".*"]
 }

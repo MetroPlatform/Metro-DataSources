@@ -95,18 +95,22 @@ const dwellAndScroll = {
     window.addEventListener("beforeunload", function() {
       leaveTime = (new Date).getTime();
 
+      let author = self.getAuthor();
+      let title = self.getTitle();
+      let publication = window.location.hostname;
+
       let datapoint = {
-        author: self.getAuthor(),
-        title: self.getTitle(),
+        author: author,
+        title: title,
         keywords: self.getKeywords(),
         description: self.getDescription(),
-        _str: self.getTitle(),
+        _str: `${title} ( ${publication} )`,
         _timestamp: Date.now(),
         loadTime: loadTime,
         leaveTime: leaveTime,
         scrollPercentage: Math.round(scrollPercentage),
         _url: URL,
-        publication: window.location.hostname
+        publication: publication
       }
 
       console.log(datapoint);
@@ -122,7 +126,11 @@ const dwellAndScroll = {
     this.mc = metroClient;
     let contentType = $('meta[property="og:type"]').attr('content');
 
-    if(contentType == "article") {
+    let pCount = $('p').length
+    let articleCount = $('article').length
+
+    if(contentType == "article" && (articleCount > 0 || pCount > 5)) {
+      console.log('Article detected')
       this.monitorDwellTime();
     }
     
