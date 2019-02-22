@@ -1,0 +1,8 @@
+{
+  "name": "crypto-articles",
+  "title": "Crypto Articles",
+  "author": "Rory",
+  "description": "This DataSource records how long you spend on a crypto article, and the % you scroll down the page.",
+  "version": "0.0.1",
+  "sites": [".*"]
+}

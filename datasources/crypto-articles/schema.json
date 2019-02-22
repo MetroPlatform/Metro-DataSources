@@ -1,0 +1,14 @@
+{
+
+  "author": "author",
+  "title": "title",
+  "keywords": ["word1", "word2"],
+  "description": "desc.",
+  "_str": "title",
+  "_timestamp": "1234567890",
+  "loadTime": "97697",
+  "leaveTime": "869",
+  "scrollPercentage": "66%",
+  "_url": "https://google.ie",
+  "publication": "theguardian.com"
+}
