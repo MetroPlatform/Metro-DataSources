@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Views",
+        "function": "_.chain(feed).filter(item => item.data._action.toLowerCase() == 'viewed').groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0]; result.data['primaryRank'] = value.length;result.data['primaryRankDisplay'] = result.data.primaryRank.toLocaleString() + ' views';return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Upvotes",
+        "function": "_.chain(feed).filter(item => item.data._action.toLowerCase() == 'upvoted').groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0]; result.data['primaryRank'] = value.length;result.data['primaryRankDisplay'] = result.data.primaryRank.toLocaleString() + ' votes';return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Copy/Pastes",
+        "function": "_.chain(feed).filter(item => item.data._action.toLowerCase() == 'copied').groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0]; result.data['primaryRank'] = value.length;result.data['primaryRankDisplay'] = result.data.primaryRank.toLocaleString() + ' copies';return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Favorites",
+        "function": "_.chain(feed).filter(item => item.data._action.toLowerCase().startsWith('fav')).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0]; result.data['primaryRank'] = value.length;result.data['primaryRankDisplay'] = result.data.primaryRank.toLocaleString() + ' favs';return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Top Tags",
+        "function": "_.chain(feed).reduce((memo, point) => {let result = memo.concat(point.data.tags);return result;}, []).map((tag) => { return tag.toLowerCase(); } ).reduce((memo, val) => {if(memo.hasOwnProperty(val)) {memo[val] += 1;} else {memo[val] = 1;}return memo;}, {}).map((value, key) => {let result = {'data': {'primaryRank': value, '_str': key, 'primaryRankDisplay': value + ' appearances', '_key': key + value}, 'datasource': feed[0].datasource}; return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Top Languages",
+        "function": "_.chain(feed).reduce((memo, point) => {let result = memo.concat(point.data.languages);return result;}, []).map((tag) => { return tag.toLowerCase(); } ).reduce((memo, val) => {if(memo.hasOwnProperty(val)) {memo[val] += 1;} else {memo[val] = 1;}return memo;}, {}).map((value, key) => {let result = {'data': {'primaryRank': value, '_str': key, 'primaryRankDisplay': value + ' appearances', '_key': key + value}, 'datasource': feed[0].datasource}; return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Recently Asked",
+        "function": "_.chain(feed).uniq(item => item.data._str).sortBy(item => -item.data.askedTimestamp).map((result, key) => { result.data['primaryRank'] = result.data.askedTimestamp - feed[feed.length - 1].data.askedTimestamp; var a = new Date(result.data.askedTimestamp*1000);var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var month = months[a.getMonth()];var date = a.getDate(); var year = a.getFullYear(); var time = date + ' ' + month + ', ' + year ; result.data['primaryRankDisplay'] = time;return result;}).value()",
+        "displayIcon": "fas fa-bolt"
+    },
+    {
+        "name": "Time To Answer",
+        "function": "_.chain(feed).uniq((item) => item.data._str).filter(item => item.data.hasAcceptedAnswer).map((value, key) => { value.data['primaryRank'] = value.data.acceptedAnswerTimestamp - value.data.askedTimestamp; let temp = value.data.primaryRank; let days = Math.floor( ( temp %= 31536000 ) / 86400 ); let hours = Math.floor( ( temp %= 86400 ) / 3600 ); let minutes = Math.floor( ( temp %= 3600 ) / 60 ); let timeTaken = Math.floor(value.data.primaryRank / (60)); value.data['primaryRankDisplay'] = ( days ? days + ' days' : hours ? hours + ' hours' : minutes ? minutes + ' minutes' : ''); return value;}).sortBy(item => -item.data.primaryRank).value()",
+        "displayIcon": "fas fa-bolt"
+    }
+]

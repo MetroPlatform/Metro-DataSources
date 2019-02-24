@@ -1,0 +1,8 @@
+{
+  "name": "stack-overflow-questions",
+  "title": "Stack Overflow Questions",
+  "author": "Rory",
+  "description": "Captures the questions that you read on Stack Overflow.",
+  "version": "0.0.1",
+  "sites": [".*stackoverflow\\.com/questions/.*"]
+}

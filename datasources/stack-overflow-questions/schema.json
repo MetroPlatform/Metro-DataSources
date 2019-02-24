@@ -1,0 +1,17 @@
+{
+  "_str": "questionTitle",
+  "_url": "window.location.href",
+  "_timestamp": "Date.now()",
+  "_action": "...",
+  "title": "questionTitle",
+  "tags": "tags",
+  "languages": [],
+  "hasAcceptedAnswer": "hasAcceptedAnswer",
+  "acceptedAnswerTimestamp": "hasAcceptedAnswer",
+  "questionUpvotes": "questionUpvotes",
+  "questionFavs": "favCount",
+  "answerCount": "answerCount",
+  "askedTimestamp": "askedTimestamp",
+  "activeTimestamp": "activeTimestamp",
+  "views": "views"
+}
