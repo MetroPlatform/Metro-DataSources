@@ -6,7 +6,7 @@
     },
     {
         "name": "Most Obscure",
-        "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];let obscurity = (value.length / parseInt(result.data['views']))*1000000;result.data['primaryRank'] = Math.round(obscurity * 100) / 100;result.data['primaryRankDisplay'] = result.data.primaryRank; result.data['maxPrimaryRank'] = _.max(feed, function(item) { return item.data.primaryRank }).data.primaryRank; console.log(result);return result;}).sortBy(function(item) {return item.data.primaryRank;}).value().reverse()",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];let obscurity = (value.length / parseInt(result.data['views']))*1000000;result.data['primaryRank'] = Math.round(obscurity * 100) / 100;result.data['primaryRankDisplay'] = result.data.primaryRank; result.data['maxPrimaryRank'] = _.max(feed, function(item) { return item.data.primaryRank }).data.primaryRank;return result;}).sortBy(function(item) {return item.data.primaryRank;}).value().reverse()",
         "display_icon": "fas fa-bolt"
     }
 ]

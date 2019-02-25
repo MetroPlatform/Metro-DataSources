@@ -106,6 +106,7 @@ const dwellAndScroll = {
         description: self.getDescription(),
         _str: `${title} ( ${publication} )`,
         _timestamp: Date.now(),
+        _action: "Viewed",
         loadTime: loadTime,
         leaveTime: leaveTime,
         scrollPercentage: Math.round(scrollPercentage),
@@ -113,11 +114,7 @@ const dwellAndScroll = {
         publication: publication
       }
 
-      console.log(datapoint);
-      console.log(self.mc)
-
       self.mc.sendDatapoint(datapoint);
-      console.log("sent");
       return null;
     });
   },
