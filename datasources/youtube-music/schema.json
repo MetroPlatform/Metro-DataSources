@@ -1,4 +1,8 @@
 {
+  "_url": "...",
+  "_timestamp": "...",
+  "_str": "...",
+  "_action": "...",
   "event": "[play|pause|finished]",
   "time": "1234567890",
   "url": "The current page URL",

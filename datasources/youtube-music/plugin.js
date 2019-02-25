@@ -78,6 +78,7 @@ const youtubeMusic = {
       _url: url,
       url: url,
       _str: title,
+      _action: "Viewed",
       _timestamp: Date.now(),
       time: Date.now(),
       event: eventType,

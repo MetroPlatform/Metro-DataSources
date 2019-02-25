@@ -1,7 +1,7 @@
 [
     {
         "name": "Top Articles",
-        "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length;return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length; result.data['_str'] = result.data._str; result.data['primaryRankDisplay'] = 'Read ' + result.data.primaryRank + '  times'; return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
         "display_icon": "fas fa-bolt"
     },
     {
@@ -16,7 +16,7 @@
     },
     {
         "name": "Top Keywords",
-        "function": "_.chain(feed).reduce((memo, point) => {result = memo.concat(point.data.keywords);return result;}, []).reduce((memo, val) => {if(memo.hasOwnProperty(val)) {memo[val] += 1;} else {memo[val] = 1;}return memo;}, {}).map((value, key) => {let result = {'data': {'primaryRank': value, '_str': key, 'primaryRankDisplay': value + ' appearances'}}; return result;}).value()",
+        "function": "_.chain(feed).reduce((memo, point) => {let result = memo.concat(point.data.keywords);return result;}, []).map((keyword) => { return keyword.toLowerCase(); } ).reduce((memo, val) => {if(memo.hasOwnProperty(val)) {memo[val] += 1;} else {memo[val] = 1;}return memo;}, {}).map((value, key) => {let result = {'data': {'primaryRank': value, '_str': key, 'primaryRankDisplay': value + ' appearances', '_key': key + value}, 'datasource': feed[0].datasource}; return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
         "display_icon": "fas fa-bolt"
     },
     {
