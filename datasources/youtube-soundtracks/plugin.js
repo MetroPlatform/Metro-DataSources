@@ -3,6 +3,7 @@ const soundtrackWords = [
   'ost',
   'soundtrack',
   'videogame',
+  'video game',
   'motion picture'
 ]
 
@@ -95,9 +96,6 @@ const youtubeSoundtracks = {
     if(!(datapoint['category'] == "Music")) {
       console.log(`[Metro - YouTube Soundtrack] Video category is ${datapoint['category']} so not sending it`)
       return false;
-    } else if(!(datapoint['lengthSeconds'] > 1500)) {
-      console.log(`[Metro - YouTube Soundtrack] Video is too short, so not sending it`)
-      return false
     } else if(!isSoundtrack(datapoint['title'])) {
       console.log(`[Metro - YouTube Soundtrack] Video title doesn't look like a soundtrack, so not sending it`)
       return false;
