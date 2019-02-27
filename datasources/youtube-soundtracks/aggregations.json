@@ -2,25 +2,21 @@
     {
         "name": "Most Popular",
         "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length; result.data['primaryRankDisplay'] = 'Plays: ' + result.data.primaryRank; result.data['maxPrimaryRank'] = _.max(feed, function(item) { return item.data.primaryRank }).data.primaryRank; return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
-        "displayIcon": "fas fa-bolt",
-        "datasource": "youtube-soundtracks"
+        "display_icon": "fas fa-bolt"
     },
     {
         "name": "Best Obscure",
         "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];let obscurity = (value.length / parseInt(result.data['views']))*1000000;result.data['primaryRank'] = Math.round(obscurity * 100) / 100;result.data['primaryRankDisplay'] = result.data.primaryRank; result.data['maxPrimaryRank'] = _.max(feed, function(item) { return item.data.primaryRank }).data.primaryRank; console.log(result);return result;}).sortBy(function(item) {return item.data.primaryRank;}).value().reverse()",
-        "displayIcon": "fas fa-bolt",
-        "datasource": "youtube-soundtracks"
+        "display_icon": "fas fa-bolt"
     },
     {
         "name": "Longest",
         "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = result.data.lengthSeconds; var d = result.data.lengthSeconds;var h = Math.floor(d / 3600); var m = Math.floor(d % 3600 / 60);var s = Math.floor(d % 3600 % 60);result.data['primaryRankDisplay'] = ('0' + h).slice(-2) + ':' + ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2); result.data['maxPrimaryRank'] = _.max(feed, function(item) { return item.data.primaryRank }).data.primaryRank; console.log(result);return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
-        "displayIcon": "fas fa-bolt",
-        "datasource": "youtube-soundtracks"
+        "display_icon": "fas fa-bolt"
     },
     {
         "name": "Recently Released",
         "function": "_.chain(feed).sortBy(item => -item.data.uploadTimestamp).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0]; console.log(result); result.data['primaryRank'] = result.data.uploadTimestamp - feed[feed.length - 1].data.uploadTimestamp; var a = new Date(result.data.uploadTimestamp*1000);var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var month = months[a.getMonth()];var date = a.getDate(); var year = a.getFullYear(); var time = date + ' ' + month + ', ' + year ; result.data['primaryRankDisplay'] = time; console.log(result);return result;}).value()",
-        "displayIcon": "fas fa-bolt",
-        "datasource": "youtube-soundtracks"
+        "display_icon": "fas fa-bolt"
     }
 ]
