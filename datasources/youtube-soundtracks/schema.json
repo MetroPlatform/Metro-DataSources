@@ -1,0 +1,12 @@
+{
+  "_str": "String representation of the datapoint",
+  "_url": "The current page URL",
+  "_timestamp": "Timestamp of the event",
+  "_action": "Action taken",
+  "time": "1234567890",
+  "title": "The page title",
+  "category": "Category of the video",
+  "views": "0123456789",
+  "lengthSeconds": "0123456789",
+  "uploadTimestamp": "0123456789"
+}
