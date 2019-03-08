@@ -1,0 +1,12 @@
+{
+  "_url": "...",
+  "_timestamp": "...",
+  "_str": "...",
+  "_action": "...",
+  "event": "[play|pause|finished]",
+  "time": "1234567890",
+  "url": "The current page URL",
+  "title": "The page title",
+  "category": "Category of the video",
+  "views": "0123456789"
+}

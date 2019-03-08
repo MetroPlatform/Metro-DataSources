@@ -1,0 +1,7 @@
+[
+    {
+        "name": "Most Popular",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data._str;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length; result.data['primaryRankDisplay'] = 'Plays: ' + result.data.primaryRank; result.data['maxPrimaryRank'] = _.max(feed, function(item) { return item.data.primaryRank }).data.primaryRank; return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "display_icon": "fas fa-bolt"
+    }
+]
