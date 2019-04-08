@@ -1,0 +1,8 @@
+{
+  "name": "study-materials",
+  "title": "Student Materials",
+  "author": "Rory",
+  "description": "Captures study materials that you open on YouTube, Loop, and Google Scholar. On YouTube, it automatically captures any videos in the 'Education' category, and on Loop/Scholar it captures any links you open.",
+  "version": "0.1",
+  "sites": ["^.*youtube\\.com.*$", "^.*scholar\\.google\\.com.*$", "^.*loop\\..*\\.ie\/course\/view\\.php\\?id=.*$"]
+}

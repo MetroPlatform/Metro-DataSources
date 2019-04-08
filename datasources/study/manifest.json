@@ -1,8 +1,0 @@
-{
-  "name": "study",
-  "title": "YouTube Education",
-  "author": "Rory",
-  "description": "This runs on all youtube pages and collects the time an education video is played, paused or finished at, along with the page title and URL. It only works on videos",
-  "version": "0.1",
-  "sites": ["^.*youtube\\.com.*$", "^.*scholar\\.google\\.com.*$"]
-}
