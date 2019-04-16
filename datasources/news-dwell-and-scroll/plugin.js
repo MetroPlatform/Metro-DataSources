@@ -21,61 +21,31 @@ function isAuthorTag(metaTag) {
   }
 }
 
+function getMetaOrBlank(metas, name) {
+  try {
+    const el = metas.find((val, idx) => {
+      const propertyAttr = val.getAttribute('property')
+      const nameAttr = val.getAttribute('name')
+      if(propertyAttr && propertyAttr.includes(name)) {
+        return true
+      } else if(nameAttr && nameAttr.includes(name)) {
+        return true
+      }
+      return false
+    })
+
+    if(el !== undefined) {
+      return el.content
+    }
+  } catch(e) {
+    console.error(e)
+    return ""
+  }
+  return ""
+}
+
 const dwellAndScroll = {
   name: 'news-dwell-and-scroll',
-
-  getAuthor: function() {
-    // Tries to find the author of the article from the webpage
-    var info = document.getElementsByTagName('META');
-
-    for (var i=0;i<info.length;i++) {
-      if (isAuthorTag(info[i])) {
-        author = info[i].getAttribute('CONTENT');
-        return author;
-      }
-    }
-    return "";
-  },
-
-  getKeywords: function() {
-    // Tries to find the author of the article from the webpage
-    var info = document.getElementsByTagName('META');
-
-    for (var i=0;i<info.length;i++) {
-      if (info[i].getAttribute('name') != null && info[i].getAttribute('name').toLowerCase().includes('keywords')) {
-        keywords = info[i].getAttribute('CONTENT');
-        return keywords.split(',');
-      }
-    }
-    return [];
-  },
-
-  getTitle: function() {
-    // Tries to find the title of the article from the webpage
-    var info = document.getElementsByTagName('META');
-
-    for (var i=0;i<info.length;i++) {
-      // console.log(info[i]);}
-      if (info[i].getAttribute('property') != null && info[i].getAttribute('property').toLowerCase().includes('title')) {
-        title = info[i].getAttribute('CONTENT');
-        return title;
-      }
-    }
-    return "";
-  },
-
-  getDescription: function() {
-    // Tries to find the title of the article from the webpage
-    var info = document.getElementsByTagName('META');
-
-    for (var i=0;i<info.length;i++) {
-      if (info[i].getAttribute('name') != null && info[i].getAttribute('name').toLowerCase().includes('description')) {
-        description = info[i].getAttribute('CONTENT');
-        return description;
-      }
-    }
-    return "";
-  },
 
   monitorDwellTime: function() {
     let self = this;
@@ -89,34 +59,63 @@ const dwellAndScroll = {
       scrollPercentage = (s / (d - c)) * 100;
     })
 
-    loadTime = (new Date).getTime();
-    URL = window.location.href;
+    const loadTime = (new Date).getTime();
+
 
     window.addEventListener("beforeunload", function() {
-      leaveTime = (new Date).getTime();
+      const URL = window.location.href;
+      const leaveTime = (new Date).getTime();
+      const nameRegex = new RegExp("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")
 
-      let author = self.getAuthor();
-      let title = self.getTitle();
-      let publication = window.location.hostname;
+      const metas = Array.from(document.querySelectorAll('META'));
+      metas.forEach(console.log)
+      var author = getMetaOrBlank(metas, 'author')
+      console.debug(author.trim())
+      console.debug(nameRegex.test(author.trim()))
+      author = nameRegex.test(author.trim()) ? author : ''
+      var title = getMetaOrBlank(metas, 'og:title')
+      if(title === "") {
+        title = getMetaOrBlank(metas, "title")
+      }
+      const description = getMetaOrBlank(metas, 'description')
+      const image = getMetaOrBlank(metas, 'image')
+      const keywordsStr = getMetaOrBlank(metas, 'keywords')
+      const keywords = keywordsStr.length > 0 ? keywordsStr.split(',') : []
+      const publication = window.location.hostname;
 
       let datapoint = {
         author: author,
         title: title,
-        keywords: self.getKeywords(),
-        description: self.getDescription(),
-        _str: `${title} ( ${publication} )`,
+        keywords: keywords,
+        description: description,
+        _image: image,
+        _str: title,
         _timestamp: Date.now(),
-        _action: "Viewed",
+        _action: "Read",
         loadTime: loadTime,
         leaveTime: leaveTime,
         scrollPercentage: Math.round(scrollPercentage),
         _url: URL,
         publication: publication
       }
+      console.log(datapoint)
 
-      self.mc.sendDatapoint(datapoint);
-      return null;
+      if(self.isValid(datapoint)) {
+        self.mc.sendDatapoint(datapoint);
+      }
     });
+  },
+
+  isValid: (datapoint) => {
+    if(datapoint._str.includes("Category: ")) {
+      return false // OpenGraph tags don't update when you browse around TechCrunch :()
+    }
+    return datapoint._str
+            && datapoint._url
+            && datapoint._timestamp
+            && datapoint._action
+            && datapoint._image
+
   },
 
   initDataSource: function(metroClient) {
@@ -126,8 +125,7 @@ const dwellAndScroll = {
     let pCount = $('p').length
     let articleCount = $('article').length
 
-    if(contentType == "article" && (articleCount > 0 || pCount > 5)) {
-      console.log('Article detected')
+    if(contentType === "article" && (articleCount > 0 || pCount > 5)) {
       this.monitorDwellTime();
     }
     
