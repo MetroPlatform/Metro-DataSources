@@ -1,8 +1,23 @@
 {
   "name": "news-dwell-and-scroll",
-  "title": "Articles/Blogs",
+  "title": "Tech Articles",
   "author": "Rory",
-  "description": "This DataSource records how long you spend on a news article, and the % you scroll down the page.",
-  "version": "0.5",
-  "sites": [".*"]
+  "description": "Captures tech articles you read, and the % of the article that you read.",
+  "version": "1.1",
+  "sites": [
+    "(:\\/\\/|.*\\.)arstechnica\\.com.*",
+    "(:\\/\\/|.*\\.)bbc(\\.co\\.uk|\\.com).*technology.*",
+    "(:\\/\\/|.*\\.)engadget\\.com.*",
+    "(:\\/\\/|.*\\.)independent\\.co\\.uk.*/gadgets-and-tech/.*",
+    "(:\\/\\/|.*\\.)newscientist\\.com.*",
+    "(:\\/\\/|.*\\.)recode\\.net.*",
+    "(:\\/\\/|.*\\.)techcrunch\\.com.*",
+    "(:\\/\\/|.*\\.)techradar\\.com.*",
+    "(:\\/\\/|.*\\.)economist\\.com.*/science-and-technology/.*",
+    "(:\\/\\/|.*\\.)nytimes\\.com.*/technology/.*",
+    "(:\\/\\/|.*\\.)thenextweb\\.com.*",
+    "(:\\/\\/|.*\\.)theverge\\.com.*",
+    "(:\\/\\/|.*\\.)motherboard\\.vice\\.com.*",
+    "(:\\/\\/|.*\\.)wired\\.com.*"
+  ]
 }
