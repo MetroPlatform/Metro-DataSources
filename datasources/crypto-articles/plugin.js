@@ -129,6 +129,15 @@ const CryptoArticles = {
   },
 
   isValid: (datapoint) => {
+    try {
+      const urlObj = new URL(datapoint._url)
+      if(urlObj.pathname.startsWith('/tags')) {
+        return false
+      }
+    } catch(e) {
+      return false
+    }
+    
     return datapoint._str
             && datapoint._url
             && datapoint._timestamp
