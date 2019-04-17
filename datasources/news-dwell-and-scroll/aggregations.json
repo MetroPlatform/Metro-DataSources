@@ -6,7 +6,7 @@
     },
     {
         "name": "Top Authors",
-        "function": "_.chain(feed).groupBy(function(o) {return o.data.author;}).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length; result.data['_str'] = result.data.author; result.data['primaryRankDisplay'] = result.data.primaryRank + ' articles';return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
+        "function": "_.chain(feed).groupBy(function(o) {return o.data.author;}).filter(group => group[0].data.author.length > 1).map((value, key) => {let result = value[0];result.data['primaryRank'] = value.length; result.data['_str'] = result.data.author; result.data['primaryRankDisplay'] = result.data.primaryRank + ' articles';return result;}).sortBy(function(item) {return -item.data.primaryRank;}).value()",
         "display_icon": "fas fa-bolt"
     },
     {

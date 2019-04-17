@@ -1,0 +1,19 @@
+{
+  "name": "crypto-articles",
+  "title": "Crypto Articles",
+  "author": "Rory",
+  "description": "This DataSource records how long you spend on a crypto article, the % you scroll down the page, and some other misc information such as the coins mentioned in the article.",
+  "version": "1.0",
+  "sites": [
+    "(:\\/\\/|.*\\.)coindesk\\.com.*",
+    "(:\\/\\/|.*\\.)cointelegraph\\.com.*",
+    "(:\\/\\/|.*\\.)bitcoin\\.com.*",
+    "(:\\/\\/|.*\\.)bitcoinist\\.com.*",
+    "(:\\/\\/|.*\\.)blockonomi\\.com.*",
+    "(:\\/\\/|.*\\.)cryptoslate\\.com.*",
+    "(:\\/\\/|.*\\.)newsbtc\\.com.*",
+    "(:\\/\\/|.*\\.)cryptovest\\.com.*",
+    "(:\\/\\/|.*\\.)ethereumworldnews\\.com.*",
+    "(:\\/\\/|.*\\.)coinhooked\\.com.*"
+  ]
+}

@@ -1,26 +1,3 @@
-function isAuthorTag(metaTag) {
-  let nameExists = metaTag.getAttribute('name') != null; 
-  let propertyExists = metaTag.getAttribute('property') != null;
-
-  if(nameExists) {
-    let nameIsAuthor = metaTag.getAttribute('name').toLowerCase().includes('author') 
-    if (nameIsAuthor) {
-      return true;
-    } else {
-      return false;
-    }
-  } else if(propertyExists) {
-    let propertyIsAuthor = metaTag.getAttribute('property').toLowerCase().includes('author');
-    if(propertyIsAuthor) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-}
-
 function getMetaOrBlank(metas, name) {
   try {
     const el = metas.find((val, idx) => {
@@ -44,12 +21,54 @@ function getMetaOrBlank(metas, name) {
   return ""
 }
 
-const dwellAndScroll = {
-  name: 'news-dwell-and-scroll',
+const nonCryptoAcronyms = [
+  'ETF',
+  'ICO',
+  'CEO',
+  'CTO',
+  'USA',
+  'API',
+  'FAQ',
+]
 
-  monitorDwellTime: function() {
+const cryptoWords = [
+  'crypto',
+  'bitcoin',
+  'blockchain',
+  'dapp',
+  'ico',
+  'altcoin',
+  'ethereum',
+  'cryptocurrency',
+  'cryptocurrencies',
+  'smart contract',
+]
+
+function isCryptoRelated(content) {
+  let words;
+  if(Array.isArray(content)) {
+    words = content
+  } else if(typeof(content) === 'string') {
+    words = content.split(' ');
+  }
+
+  for(var i=0; i<words.length; i++) {
+    for(var j=0; j<cryptoWords.length; j++) {
+      if(words[i].indexOf(cryptoWords[j]) !== -1) {
+        console.log(`Matched ${words[i]} with ${cryptoWords[j]}`)
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+const CryptoArticles = {
+  name: 'crypto-articles',
+
+  start: function() {
     let self = this;
-
     var scrollPercentage = 0;
     $(window).on('scroll', function(){
       var s = $(window).scrollTop(),
@@ -62,16 +81,13 @@ const dwellAndScroll = {
     const loadTime = (new Date).getTime();
 
 
-    window.addEventListener("beforeunload", function() {
+    window.addEventListener("beforeunload", function(e) {
       const URL = window.location.href;
       const leaveTime = (new Date).getTime();
       const nameRegex = new RegExp("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")
 
       const metas = Array.from(document.querySelectorAll('META'));
-      metas.forEach(console.log)
       var author = getMetaOrBlank(metas, 'author')
-      console.debug(author.trim())
-      console.debug(nameRegex.test(author.trim()))
       author = nameRegex.test(author.trim()) ? author : ''
       var title = getMetaOrBlank(metas, 'og:title')
       if(title === "") {
@@ -82,25 +98,29 @@ const dwellAndScroll = {
       const keywordsStr = getMetaOrBlank(metas, 'keywords')
       const keywords = keywordsStr.length > 0 ? keywordsStr.split(',') : []
       const publication = window.location.hostname;
+      const coins = this.getCoins()
 
       let datapoint = {
-        author: author,
-        title: title,
-        keywords: keywords,
-        description: description,
+        _url: URL,
         _image: image,
         _str: title,
         _timestamp: Date.now(),
         _action: "Read",
+        author: author,
+        title: title,
+        keywords: keywords,
+        coins: coins,
+        description: description,
         loadTime: loadTime,
         leaveTime: leaveTime,
         scrollPercentage: Math.round(scrollPercentage),
-        _url: URL,
         publication: publication
       }
+      console.log(datapoint)
 
       if(this.isValid(datapoint)) {
-        this.mc.sendDatapoint(datapoint);
+        this.mc.sendDatapoint(datapoint)
+
         // To make sure the request fires
         var t = Date.now() + 200;
         while(Date.now() < t) {};
@@ -109,15 +129,22 @@ const dwellAndScroll = {
   },
 
   isValid: (datapoint) => {
-    if(datapoint._str.includes("Category: ")) {
-      return false // OpenGraph tags don't update when you browse around TechCrunch :()
-    }
     return datapoint._str
             && datapoint._url
             && datapoint._timestamp
             && datapoint._action
             && datapoint._image
 
+  },
+
+  getCoins: () => {
+    let coins = [];
+    $('p').each((idx, p) => {
+      let newCoins = ($(p).html().match(new RegExp('\b[A-Z]{3}\b', 'g')) || [])
+      
+      coins = coins.concat(newCoins)
+    })
+    return coins.filter(coin => !nonCryptoAcronyms.includes(coin));
   },
 
   initDataSource: function(metroClient) {
@@ -127,11 +154,11 @@ const dwellAndScroll = {
     let pCount = $('p').length
     let articleCount = $('article').length
 
-    if(contentType === "article" && (articleCount > 0 || pCount > 5)) {
-      this.monitorDwellTime();
+    if(contentType == "article" && (articleCount > 0 || pCount > 5)) {
+      this.start();
     }
     
   }
 }
 
-registerDataSource(dwellAndScroll);
+registerDataSource(CryptoArticles);
