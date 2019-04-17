@@ -1,24 +1,24 @@
-function isAuthorTag(metaTag) {
-  let nameExists = metaTag.getAttribute('name') != null; 
-  let propertyExists = metaTag.getAttribute('property') != null;
+function getMetaOrBlank(metas, name) {
+  try {
+    const el = metas.find((val, idx) => {
+      const propertyAttr = val.getAttribute('property')
+      const nameAttr = val.getAttribute('name')
+      if(propertyAttr && propertyAttr.includes(name)) {
+        return true
+      } else if(nameAttr && nameAttr.includes(name)) {
+        return true
+      }
+      return false
+    })
 
-  if(nameExists) {
-    let nameIsAuthor = metaTag.getAttribute('name').toLowerCase().includes('author') 
-    if (nameIsAuthor) {
-      return true;
-    } else {
-      return false;
+    if(el !== undefined) {
+      return el.content
     }
-  } else if(propertyExists) {
-    let propertyIsAuthor = metaTag.getAttribute('property').toLowerCase().includes('author');
-    if(propertyIsAuthor) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
+  } catch(e) {
+    console.error(e)
+    return ""
   }
+  return ""
 }
 
 const nonCryptoAcronyms = [
@@ -26,6 +26,9 @@ const nonCryptoAcronyms = [
   'ICO',
   'CEO',
   'CTO',
+  'USA',
+  'API',
+  'FAQ',
 ]
 
 const cryptoWords = [
@@ -40,18 +43,6 @@ const cryptoWords = [
   'cryptocurrencies',
   'smart contract',
 ]
-
-function getCoins() {
-  let coins = [];
-  $('p').each((idx, p) => {
-    let newCoins = ($(p).html().match(new RegExp('[A-Z]{3}', 'g')) || [])
-    
-    coins = coins.concat(newCoins)
-  })
-
-  console.log(coins)
-  return coins;
-}
 
 function isCryptoRelated(content) {
   let words;
@@ -76,117 +67,84 @@ function isCryptoRelated(content) {
 const CryptoArticles = {
   name: 'crypto-articles',
 
-  getAuthor: function() {
-    // Tries to find the author of the article from the webpage
-    var info = document.getElementsByTagName('META');
-
-    for (var i=0;i<info.length;i++) {
-      if (isAuthorTag(info[i])) {
-        author = info[i].getAttribute('CONTENT');
-        return author;
-      }
-    }
-    return "";
-  },
-
-  getKeywords: function() {
-    // Tries to find the author of the article from the webpage
-    var info = document.getElementsByTagName('META');
-
-    for (var i=0;i<info.length;i++) {
-      if (info[i].getAttribute('name') != null && info[i].getAttribute('name').toLowerCase().includes('keywords')) {
-        keywords = info[i].getAttribute('CONTENT');
-        return keywords.split(',');
-      }
-    }
-    return [];
-  },
-
-  getTitle: function() {
-    // Tries to find the title of the article from the webpage
-    var info = document.getElementsByTagName('META');
-
-    for (var i=0;i<info.length;i++) {
-      // console.log(info[i]);}
-      if (info[i].getAttribute('property') != null && info[i].getAttribute('property').toLowerCase().includes('title')) {
-        title = info[i].getAttribute('CONTENT');
-        return title;
-      }
-    }
-    return "";
-  },
-
-  getDescription: function() {
-    // Tries to find the title of the article from the webpage
-    var info = document.getElementsByTagName('META');
-
-    for (var i=0;i<info.length;i++) {
-      if (info[i].getAttribute('name') != null && info[i].getAttribute('name').toLowerCase().includes('description')) {
-        description = info[i].getAttribute('CONTENT');
-        return description;
-      }
-    }
-    return "";
-  },
-
   start: function() {
-
-    // var scrollPercentage = 0;
-    // $(window).on('scroll', function(){
-    //   var s = $(window).scrollTop(),
-    //       d = $(document).height(),
-    //       c = $(window).height();
+    let self = this;
+    var scrollPercentage = 0;
+    $(window).on('scroll', function(){
+      var s = $(window).scrollTop(),
+          d = $(document).height(),
+          c = $(window).height();
     
-    //   scrollPercentage = (s / (d - c)) * 100;
-    // })
+      scrollPercentage = (s / (d - c)) * 100;
+    })
 
-    loadTime = (new Date).getTime();
-    URL = window.location.href;
+    const loadTime = (new Date).getTime();
 
-    getCoins()
 
-    this.generateData.bind(this)()
-    // window.addEventListener("beforeunload", this.generateData().bind(this));
+    window.addEventListener("beforeunload", function(e) {
+      const URL = window.location.href;
+      const leaveTime = (new Date).getTime();
+      const nameRegex = new RegExp("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")
+
+      const metas = Array.from(document.querySelectorAll('META'));
+      var author = getMetaOrBlank(metas, 'author')
+      author = nameRegex.test(author.trim()) ? author : ''
+      var title = getMetaOrBlank(metas, 'og:title')
+      if(title === "") {
+        title = getMetaOrBlank(metas, "title")
+      }
+      const description = getMetaOrBlank(metas, 'description')
+      const image = getMetaOrBlank(metas, 'image')
+      const keywordsStr = getMetaOrBlank(metas, 'keywords')
+      const keywords = keywordsStr.length > 0 ? keywordsStr.split(',') : []
+      const publication = window.location.hostname;
+      const coins = this.getCoins()
+
+      let datapoint = {
+        _url: URL,
+        _image: image,
+        _str: title,
+        _timestamp: Date.now(),
+        _action: "Read",
+        author: author,
+        title: title,
+        keywords: keywords,
+        coins: coins,
+        description: description,
+        loadTime: loadTime,
+        leaveTime: leaveTime,
+        scrollPercentage: Math.round(scrollPercentage),
+        publication: publication
+      }
+      console.log(datapoint)
+
+      if(this.isValid(datapoint)) {
+        this.mc.sendDatapoint(datapoint)
+
+        // To make sure the request fires
+        var t = Date.now() + 200;
+        while(Date.now() < t) {};
+      }
+    }.bind(this));
   },
 
-  generateData: function() {
-    leaveTime = (new Date).getTime();
+  isValid: (datapoint) => {
+    return datapoint._str
+            && datapoint._url
+            && datapoint._timestamp
+            && datapoint._action
+            && datapoint._image
 
-    let author = this.getAuthor();
-    let title = this.getTitle();
-    let publication = window.location.hostname;
-
-    let datapoint = {
-      author: author,
-      title: title,
-      keywords: this.getKeywords(),
-      description: this.getDescription(),
-      _str: `${title} ( ${publication} )`,
-      _timestamp: Date.now(),
-      loadTime: loadTime,
-      leaveTime: leaveTime,
-      // scrollPercentage: Math.round(scrollPercentage),
-      _url: URL,
-      publication: publication
-    }
-
-    console.log(datapoint);
-
-    if(this.validate(datapoint)) {
-      this.mc.sendDatapoint(datapoint)
-    }
-
-    return null;
   },
 
-  validate: function(datapoint) {
-    if(isCryptoRelated(datapoint.description) 
-        || isCryptoRelated(datapoint.keywords)
-        || isCryptoRelated(datapoint.title)) {
-      return true
-    } else {
-      return false
-    }
+  getCoins: () => {
+    let coins = [];
+    $('p').each((idx, p) => {
+      let newCoins = ($(p).html().match(new RegExp('\b[A-Z]{3}\b', 'g')) || [])
+      
+      coins = coins.concat(newCoins)
+    })
+    return coins.filter(coin => !nonCryptoAcronyms.includes(coin));
   },
 
   initDataSource: function(metroClient) {

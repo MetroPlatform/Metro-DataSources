@@ -98,12 +98,14 @@ const dwellAndScroll = {
         _url: URL,
         publication: publication
       }
-      console.log(datapoint)
 
-      if(self.isValid(datapoint)) {
-        self.mc.sendDatapoint(datapoint);
+      if(this.isValid(datapoint)) {
+        this.mc.sendDatapoint(datapoint);
+        // To make sure the request fires
+        var t = Date.now() + 200;
+        while(Date.now() < t) {};
       }
-    });
+    }.bind(this));
   },
 
   isValid: (datapoint) => {

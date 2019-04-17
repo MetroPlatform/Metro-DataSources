@@ -2,6 +2,7 @@
 
   "author": "author",
   "title": "title",
+  "coins": ["BTC, ETH"],
   "keywords": ["word1", "word2"],
   "description": "desc.",
   "_str": "title",
