@@ -176,8 +176,8 @@ const CryptoArticles = {
       })
     )
     const realCoins = coinInfo.filter(cp => cp[1] === true).map(cp => cp[0])
-
-    return coins.filter(coin => realCoins.includes(coin));
+    console.debug(realCoins)
+    return realCoins
   },
 
   isValidCoin: (coin) => {
