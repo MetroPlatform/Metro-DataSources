@@ -26,6 +26,18 @@ const nonCryptoAcronyms = [
   'ICO',
   'CEO',
   'CTO',
+  'CFO',
+  'CMO',
+  'COO',
+  'FTP',
+  'GTD',
+  'PDF',
+  'DNS',
+  'XML',
+  'GUI',
+  'VPN',
+  'USD',
+  'GBP',
   'USA',
   'API',
   'FAQ',
@@ -67,7 +79,7 @@ function isCryptoRelated(content) {
 const CryptoArticles = {
   name: 'crypto-articles',
 
-  start: function() {
+  start: async function() {
     let self = this;
     var scrollPercentage = 0;
     $(window).on('scroll', function(){
@@ -79,6 +91,7 @@ const CryptoArticles = {
     })
 
     const loadTime = (new Date).getTime();
+    const coins = await this.getCoins()
 
 
     window.addEventListener("beforeunload", function(e) {
@@ -98,7 +111,6 @@ const CryptoArticles = {
       const keywordsStr = getMetaOrBlank(metas, 'keywords')
       const keywords = keywordsStr.length > 0 ? keywordsStr.split(',') : []
       const publication = window.location.hostname;
-      const coins = this.getCoins()
 
       let datapoint = {
         _url: URL,
@@ -116,7 +128,6 @@ const CryptoArticles = {
         scrollPercentage: Math.round(scrollPercentage),
         publication: publication
       }
-      console.log(datapoint)
 
       if(this.isValid(datapoint)) {
         this.mc.sendDatapoint(datapoint)
@@ -146,14 +157,35 @@ const CryptoArticles = {
 
   },
 
-  getCoins: () => {
+  getCoins: async function() {
     let coins = [];
     $('p').each((idx, p) => {
-      let newCoins = ($(p).html().match(new RegExp('\b[A-Z]{3}\b', 'g')) || [])
+      let newCoins = ($(p).html().match(new RegExp(/\b[A-Z]{3}\b/, 'g')) || [])
       
       coins = coins.concat(newCoins)
     })
-    return coins.filter(coin => !nonCryptoAcronyms.includes(coin));
+    const uniqueCoins = [...new Set(coins)]
+    const coinInfo = await Promise.all(
+      uniqueCoins.map(async (c) => {
+        const result = await fetch(`https://min-api.cryptocompare.com/data/price?fsym=${c}&tsyms=USD&api_key=2fb48558fb7e0241a083eea864cf13f46e7e2a5970410b9856d02c8d758507f8`)
+          .then(res => res.json())
+          .then(data => {
+            return data.hasOwnProperty('USD') && !(nonCryptoAcronyms.includes(c))
+          })
+        return [c, result]
+      })
+    )
+    const realCoins = coinInfo.filter(cp => cp[1] === true).map(cp => cp[0])
+    console.debug(realCoins)
+    return realCoins
+  },
+
+  isValidCoin: (coin) => {
+    return fetch(`https://min-api.cryptocompare.com/data/price?fsym=${coin}&tsyms=USD&api_key=2fb48558fb7e0241a083eea864cf13f46e7e2a5970410b9856d02c8d758507f8`)
+              .then(res => res.json())
+              .then(data => {
+                return data.hasOwnProperty('USD')
+              })
   },
 
   initDataSource: function(metroClient) {
